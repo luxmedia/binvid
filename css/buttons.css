@@ -1,0 +1,58 @@
+/* BUTTONS */
+.button {
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: 600;
+	line-height: 1.5;
+	border-radius: 1000px;
+	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+
+.button.primary {
+	color: #fff;
+	padding: .85em 1.6em;
+}
+.button.primary:hover,
+.button.primary:focus {
+	color: #fff;
+}
+.button.disabled,
+.button[disabled] {
+	box-shadow: none;	
+}
+
+.button.clear,
+.button.clear:hover {
+	box-shadow: none;
+}
+.button.clear:hover {
+	background-color: rgba(0, 152, 255, .1);
+}
+
+.button.disabled.primary,
+.button.disabled.primary:focus,
+.button.disabled.primary:hover,
+.button[disabled].primary,
+.button[disabled].primary:focus,
+.button[disabled].primary:hover {
+    background-color: #0098ff;
+    color: #fff;
+}
+
+.button--file {
+	/* 
+	background-position: 80% center;
+	background-size: 24px;
+	background-repeat: no-repeat;
+	background-image: url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMiAzMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIzMnB4IiBoZWlnaHQ9IjMycHgiPgo8Zz4KCTxnPgoJCTxwYXRoIGQ9Ik0yMi40MTQsMEg0djMyaDI0VjUuNTg0TDIyLjQxNCwweiBNMjEuOTk4LDIuNDEzTDI1LjU4Niw2aC0zLjU4OCAgICBDMjEuOTk4LDYsMjEuOTk4LDIuNDEzLDIxLjk5OCwyLjQxM3ogTTI2LDMwSDZWMS45OThoMTR2Ni4wMDFoNlYzMHoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8cG9seWdvbiBwb2ludHM9IjEyLDE1IDgsMTIgOCwyMiAxMiwxOSAxMiwyMiAyNCwyMiAyNCwxMiAxMiwxMiAgICIgZmlsbD0iIzAwMDAwMCIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=');
+	*/
+}
+
+#btnAddFile {
+	text-indent: 40px;
+	padding-right: 30px;
+}
+
+.button.dz-clickable {
+	cursor: pointer;
+}

@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<config>
+	<!-- 
+	____ FOLDERS ____
+		IMPORTANT NOTE: Folder path should be absolute, not relative
+	-->
+	<folder>
+		<uploadFolder>functions/uploads</uploadFolder>
+		<uploadFolderTmp>functions/uploads/tmp</uploadFolderTmp>
+		<debugLogFolder>logs</debugLogFolder>
+	</folder>
+	
+	<!-- 
+	____ FILE DESTINATIONS/FOLDERS (VPMS, MediaLoopster ...) ____
+		Description: Contains folders/options, where the files can be placed
+		NOTE: Sort order of <option>-elements represents display order in webform
+		params:
+		title: containes visible value in webform select box 
+		value: represents actual destination folder name
+	-->
+	<destination>
+		<option title="VPMS (Berlin)">VPMS</option>
+		<option title="MediaLoopster">MediaLoopster</option>
+		<option title="AVID (Berlin)">AVID</option>
+	</destination>
+
+	<!-- 
+	____ DROPZONE CONFIGURATION / PARAMETER ____
+		Description: Contains configuration values for dropzone.js script
+	-->
+	<dropzone>
+		
+		<debugMode description="Enable console logging." note="Should be 0 for PRODUCTION use!">
+			<default>0</default>
+			<value>1</value>
+		</debugMode>
+		
+		<preventDuplicates description="If enebaled, users can not upload files with same name, to avoid duplicates">
+			<default>1</default>
+			<value>1</value>
+		</preventDuplicates>
+	
+		<addRemoveLinks description="Show Cancel Upload button for each file" default="true">
+			<default>true</default>
+			<value>true</value>
+		</addRemoveLinks>
+		
+		<autoProcessQueue description="Automatically start file uploads, when they are dropped" default="false">
+			<default>false</default>
+			<value>false</value>
+		</autoProcessQueue>
+		
+		<allowedFileTypes description="Allowed video/audio file types" pattern="Comma-separated suffixes with leading '.' - e.g. '.mpg,.mp4'">
+			<default>.mpg,.m2t,.m2p,.mpeg,.mts,.m2v,.mov,.mp4,.wmv,.vob,.mxf,.wav,.aif,.mp3,.mp2,.m4a</default>
+			<value>.mpg,.m2t,.m2p,.mpeg,.mts,.m2v,.mov,.mp4,.wmv,.vob,.mxf,.wav,.aif,.mp3,.mp2,.m4a</value>
+		</allowedFileTypes>
+		
+		<chunkSize description="Chunk size in MegaBytes. Default 28MB" pattern="x * 1024 *1024">
+			<default>28</default>
+			<value>28</value>
+		</chunkSize>
+		
+		<chunking description="Enable chunking">
+			<default>true</default>
+			<value>true</value>
+		</chunking>
+		
+		<forceChunking description="Always use chunks">
+			<default>false</default>
+			<value>false</value>
+		</forceChunking>
+		
+		<parallelChunkUploads description="Enabel parallel chunk uploads">
+			<default>false</default>
+			<value>false</value>
+		</parallelChunkUploads>
+		
+		<maxFiles description="Limit max number of files that can be handled" pattern="numeric or 'null'">
+			<default>null</default>
+			<value>null</value>
+		</maxFiles>
+		
+		<maxFilesize description="Max upload file size in MB" pattern="x * 1024">
+			<default>50</default>
+			<value>50</value>
+		</maxFilesize>
+		
+		<parallelUploads description="max amount of parallel file uploads" note="increase carefully, to avoid performance and runtime issues!">
+			<default>2</default>
+			<value>20</value>
+		</parallelUploads>
+		
+		<retryChunks description="retry chunk upload on fail">
+			<default>true</default>
+			<value>true</value>
+		</retryChunks>
+		
+		<retryChunksLimit description="max retry attempts">
+			<default>3</default>
+			<value>3</value>
+		</retryChunksLimit>
+		
+		<uploadMultiple description="Send multiple files in one request" note="MUST be FALSE when chunking is true!!!">
+			<default>false</default>
+			<value>false</value>
+		</uploadMultiple>
+		
+		<minTitleLength description="Minimum characters for video title">
+			<default>4</default>
+			<value>4</value>
+		</minTitleLength>
+		
+		<maxTitleLength description="Maximum characters for video title">
+			<default>52</default>
+			<value>52</value>
+		</maxTitleLength>
+	</dropzone>
+
+</config>

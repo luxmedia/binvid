@@ -1,0 +1,38 @@
+/* MESSAGES */
+#app-messages {
+  transition: all 0.3s ease;
+  width: 100%;
+  height: auto;
+  top: -200px;
+  position: absolute;
+  opacity: 0;
+  z-index: 998;
+}
+
+#app-messages.is--active {
+  opacity: 1;
+}
+
+#app-messages .callout {
+	display: block;
+	overflow: hidden;
+	height: auto;
+	margin: 0;
+	border-style: solid;
+	border-width: 0 0 0 3px;
+	font-weight: 600;
+	text-align: center;
+}
+
+.callout.primary {
+	border-color: #0098ff;
+	color: #0D47A1;	
+}
+.callout.alert {
+	border-color: #f44336;
+	color: #B71C1C;
+}
+.callout.success {
+	border-color: #4caf50;
+	color: #004D40;
+}

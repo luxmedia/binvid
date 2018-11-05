@@ -1,0 +1,15 @@
+/* PROGRESS METERS */
+.progress {
+	background: rgba(0,0,0,0.1);
+}
+.progress-meter {
+	-webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;	
+}
+
+.progress-meter-text.is--overflowing {
+	left: 0;
+}

@@ -1,0 +1,60 @@
+/* ICONS */
+.icon {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-size: 100%;
+}
+
+.icon--left {
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+.icon--small {
+	width: 16px;
+	height: 16px;
+}
+
+.icon--large {
+	width: 64px;
+	height: 64px;
+	margin-bottom: 1rem;
+}
+
+.icon--upload {
+	background-image: url('../images/upload.svg');
+}
+
+.icon--file {
+	background-image: url('../images/video-document.svg');
+	opacity: 0.7;
+}
+.icon--plus {
+	background-image: url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDkyLDIzNkgyNzZWMjBjMC0xMS4wNDYtOC45NTQtMjAtMjAtMjBjLTExLjA0NiwwLTIwLDguOTU0LTIwLDIwdjIxNkgyMGMtMTEuMDQ2LDAtMjAsOC45NTQtMjAsMjBzOC45NTQsMjAsMjAsMjBoMjE2ICAgIHYyMTZjMCwxMS4wNDYsOC45NTQsMjAsMjAsMjBzMjAtOC45NTQsMjAtMjBWMjc2aDIxNmMxMS4wNDYsMCwyMC04Ljk1NCwyMC0yMEM1MTIsMjQ0Ljk1NCw1MDMuMDQ2LDIzNiw0OTIsMjM2eiIgZmlsbD0iI0ZGRkZGRiIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=');
+}
+
+.icon--help {
+	background-image: url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgNDAwIDQwMCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDAwIDQwMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxnPgoJCTxwYXRoIGQ9Ik0xOTkuOTk2LDBDODkuNzE5LDAsMCw4OS43MiwwLDIwMGMwLDExMC4yNzksODkuNzE5LDIwMCwxOTkuOTk2LDIwMEMzMTAuMjgxLDQwMCw0MDAsMzEwLjI3OSw0MDAsMjAwICAgIEM0MDAsODkuNzIsMzEwLjI4MSwwLDE5OS45OTYsMHogTTE5OS45OTYsMzczLjc3QzEwNC4xODcsMzczLjc3LDI2LjIzLDI5NS44MTYsMjYuMjMsMjAwICAgIGMwLTk1LjgxNyw3Ny45NTctMTczLjc2OSwxNzMuNzY2LTE3My43NjljOTUuODE2LDAsMTczLjc3Miw3Ny45NTMsMTczLjc3MiwxNzMuNzY5ICAgIEMzNzMuNzY5LDI5NS44MTYsMjk1LjgxMiwzNzMuNzcsMTk5Ljk5NiwzNzMuNzd6IiBmaWxsPSIjMDA5OGZmIi8+CgkJPHBhdGggZD0iTTE5OS45OTYsOTEuMzgyYy0zNS4xNzYsMC02My43ODksMjguNjE2LTYzLjc4OSw2My43OTNjMCw3LjI0Myw1Ljg3MSwxMy4xMTUsMTMuMTEzLDEzLjExNSAgICBjNy4yNDYsMCwxMy4xMTctNS44NzMsMTMuMTE3LTEzLjExNWMwLTIwLjcxLDE2Ljg0OC0zNy41NjIsMzcuNTU5LTM3LjU2MmMyMC43MTksMCwzNy41NjYsMTYuODUyLDM3LjU2NiwzNy41NjIgICAgYzAsMjAuNzE0LTE2Ljg0OSwzNy41NjYtMzcuNTY2LDM3LjU2NmMtNy4yNDIsMC0xMy4xMTMsNS44NzMtMTMuMTEzLDEzLjExNHY0NS42ODRjMCw3LjI0Myw1Ljg3MSwxMy4xMTUsMTMuMTEzLDEzLjExNSAgICBzMTMuMTE3LTUuODcyLDEzLjExNy0xMy4xMTV2LTMzLjkzOGMyOC45MDUtNi4wNjQsNTAuNjgtMzEuNzQ2LDUwLjY4LTYyLjQyN0MyNjMuNzkzLDExOS45OTgsMjM1LjE3Niw5MS4zODIsMTk5Ljk5Niw5MS4zODJ6IiBmaWxsPSIjMDA5OGZmIi8+CgkJPHBhdGggZD0iTTIwMC4wMDQsMjczLjczOGMtOS4wODYsMC0xNi40NjUsNy4zNzEtMTYuNDY1LDE2LjQ2MnM3LjM3OSwxNi40NjUsMTYuNDY1LDE2LjQ2NWM5LjA5NCwwLDE2LjQ1Ny03LjM3NCwxNi40NTctMTYuNDY1ICAgIFMyMDkuMDk4LDI3My43MzgsMjAwLjAwNCwyNzMuNzM4eiIgZmlsbD0iIzAwOThmZiIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=');
+}
+
+.icon.primary {
+	background-color: rgba(0, 152, 255, 1);
+}
+
+.button .icon {
+	margin: 0 10px;
+	vertical-align: middle;
+}
+
+.button .icon.primary {
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;  
+}
+
+.button .icon.seamless {
+	width: 44px;
+    height: 44px;	
+	margin: -.85em -1em;
+}

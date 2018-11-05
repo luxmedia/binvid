@@ -1,0 +1,131 @@
+/* FORM */
+select {
+	cursor: pointer;
+}
+
+#app-form {
+	background: #fff;
+	padding: 2rem;
+}
+
+label {
+    font-size: 0.75rem;
+    font-weight: 600;
+	/* color: rgba(0,0,0,0.6); */
+	color: #0098ff;
+	text-transform: uppercase;
+}
+
+label em,
+.requiredNote {
+	color: #d14;
+}
+
+label em {
+	margin-left: 2px;
+}
+
+.requiredNote {
+	font-size: .9rem;
+}
+
+/*
+#fieldset .floated-label-wrapper {
+	position: relative;
+}
+
+#fieldset .floated-label-wrapper label {
+
+	background: #fff;
+    left: 0.75rem;
+	top: -0.85rem;
+	z-index: 1;
+    padding: 0 0.25rem;
+    position: absolute;
+    transition: all 0.15s ease-in;
+
+}
+*/
+
+.card {
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+	box-shadow: 12px 12px 40px -15px rgba(0,0,0,0.3);
+}
+
+
+/* Custom ------------------ */
+
+.input-requirements {
+  font-size: .9rem;
+  font-style: italic;
+  text-align: left;
+  list-style: disc;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0 0 10px 0;
+  color: rgb(150,150,150);
+}
+
+.help-text {
+	color: rgba(0,0,0,0.6);
+}
+
+.input-requirements li {
+	display: block;
+}
+
+.input-requirements li p {
+	padding: 0;
+	margin: 0;
+}
+
+.input-requirements li.invalid {
+	color: #e74c3c;
+}
+.input-requirements li.valid {
+	color: #2ecc71;
+}
+
+.input-requirements li.valid:after {
+	display: inline-block;
+	padding-left: 10px;
+	content: "\2713";
+}
+
+.inputTitle input {
+	max-width: 420px;
+}
+
+#formSubnotes {
+	font-size: 0.9rem;
+}
+
+#formSubnotes li {
+	display: block;
+	margin: 5px 0 10px 0;
+}
+
+#formSubnotes .allowedMimeTypes {
+	display: block;
+	color: rgba(0,0,0,0.7);
+}
+
+/* 
+input:not([type="submit"]):valid {
+  border-color: #2ecc71;
+}
+
+
+input:not([type="submit"]) + .input-requirements {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 1s ease-out;  
+}
+
+input:not([type="submit"]):hover + .input-requirements,
+input:not([type="submit"]):focus + .input-requirements,
+input:not([type="submit"]):active + .input-requirements {
+  max-height: 1000px;
+  transition: max-height 1s ease-in;
+}
+*/

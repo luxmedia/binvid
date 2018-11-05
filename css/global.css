@@ -1,0 +1,35 @@
+/* GLOBAL AND TYPOGRAPHY */
+* {
+	-webkit-font-smoothing: antialiased;
+}
+
+body {
+	background: #f3f3f3;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2 {
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: 700;
+	line-height: 1.2;
+	margin: 0;
+}
+
+.left {
+	float: left;
+}
+
+.round {
+	border-radius: 1000px;
+}
+
+
+/* SHADOW ELEVATION */
+.appbar {
+	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.helpLink {
+	display: inline-block;
+}
