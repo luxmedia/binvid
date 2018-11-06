@@ -1,45 +1,71 @@
 <?php
 
+    /*.
+        require_module 'core';
+        require_module 'file';
+    .*/
+
 	// Start session to make $_SESSION available
 	if(!isset($_SESSION)) session_start();
 
-	// GLOBAL VARS	
+	// GLOBAL VARS
 	if (!defined('__ROOT__')) define('__ROOT__', str_replace("\\","/",dirname(__FILE__)));
 
 	require_once(__ROOT__ . '/include/config.inc.php');
+
 
 	// GLOBAL FUNCTIONS
 
 	/**
 	 *
-	 * Helper: Create debugging logfile
+	 * Create debugging logfile
+	 * @param string $log_msg
 	 */
 	function debugLog($log_msg) {
 
 		if ($GLOBALS['enableDebugLog']) {
-			if (!file_exists($GLOBALS['log_path'])) 
-			{
+			if (!file_exists($GLOBALS['log_path'])) {
 				// create directory/folder uploads.
 				mkdir($GLOBALS['log_path'], 0777, true);
 			}
 			$log_file_data = $GLOBALS['log_path'].DS.'binvid_log_' . date('Y-m-d') . '.log';
-			file_put_contents($log_file_data, print_r($log_msg) . "\r\n", FILE_APPEND);		
+			file_put_contents($log_file_data, print_r($log_msg) . "\r\n", FILE_APPEND);
 		}
+	}
+
+
+	/**
+	* Create HTML select options from simple XML object
+	* @link https://stackoverflow.com/a/9851406
+	* @param array $obj - simple xml array
+	* @return string
+	*/
+	function createSelectOptionsFromXml($obj) {
+		$html = '';
+	    foreach ($obj as $select) {
+	        foreach ($select->option as $option) {
+	            $destiTitle = $option['title'];
+	            $destiValue = $option;
+	            $html .= '<option value="'.$destiValue.'">' . $destiTitle . '</option>';
+	        }
+	    }
+        return $html;
 	}
 
 	/**
 	 *
-	 * Helper: get file extension
-	 * @return: associative array with 'filename' and 'extension'
-	 */	
+	 * Get file extension string
+	 * @param string $filename
+	 * @return array - associative array with 'filename' and 'extension'
+	 */
 	function getFilenameParts($filename) {
 		$file_parts = [];
 		if (function_exists('pathinfo')) {
 			$file_parts = pathinfo($filename);
 		} else {
-			$array = explode('.', $filename);
-			$file_parts['extension'] = end($array); // file extension only			
-			$file_parts['filename'] = array_pop($array);
+			$arr = explode('.', $filename);
+			$file_parts['extension'] = end($arr); // file extension only
+			$file_parts['filename'] = array_pop($arr);
 			//$fileName = basename($filename);
 			//$file_parts['filename'] = preg_replace("/\.[^.]+$/", "", $fileName); // filename without extension
 		}
@@ -48,20 +74,21 @@
 
 	/**
 	 *
-	 * Helper: Sanitize filename
-	 * @return: string with only letters, numbers and "-"
+	 * Sanitize filename
+	 * @param string $filename
+	 * @return string - with only letters, numbers and "-"
 	 */
-	function normalizeFilename($string) {
+	function normalizeFilename($filename) {
 		// Remove any character that is not alphanumeric, white-space, a hyphen or a underscore
-		$string = preg_replace('/[^a-z0-9\s\-\_]/i', '', $string);
+		$filename = preg_replace('/[^a-z0-9\s\-\_]/i', '', $filename);
 		// Replace all spaces with hyphens
-		$string = preg_replace('/\s/', '-', $string);
+		$filename = preg_replace('/\s/', '-', $filename);
 		// Replace multiple hyphens with a single hyphen
-		$string = preg_replace('/\-\-+/', '-', $string);
+		$filename = preg_replace('/\-\-+/', '-', $filename);
 		// Remove leading and trailing hyphens, and then lowercase the URL
-		$string = strtolower(trim($string, '-'));
+		$filename = strtolower(trim($filename, '-'));
 
-		return $string;
+		return $filename;
 	}
 
 
