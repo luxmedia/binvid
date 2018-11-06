@@ -2,18 +2,23 @@
 
     /**
      * @author Gregory Chris (http://online-php.com)
-     * @email www.online.php@gmail.com
+     * @link www.online.php@gmail.com
      * @editor Bivek Joshi (http://www.bivekjoshi.com.np)
      * @email meetbivek@gmail.com
-     * HEAVILY MODIFIED by Veny T
+     * @modified HEAVILY MODIFIED by Veny T
      * This is a plain PHP version for dropzone
      * Chunks collected in uploads/tmp/
      * Whole files placed in uploads/whole_from_chunks/
      * Name of the final file returned upon finished process
 	 *
-	 * MODIFIED by David Wagner
-	 * MODIFIED 2018-10-29 - by Volker Lux
+	 * @modified by David Wagner
+	 * @modified 2018-10-29 - by Volker Lux
      */
+
+    /*.
+        require_module 'core';
+        require_module 'file';
+    .*/
 
 	// Start session to make $_SESSION available
 	if(!isset($_SESSION)) session_start();
@@ -23,66 +28,21 @@
 	// GLOBAL VARS
 	if (!defined('__ROOT__')) define('__ROOT__', str_replace("\\","/",dirname(__FILE__)));
 
-	require_once(__ROOT__ . '/include/config.inc.php');
-	require_once(__ROOT__ . '/include/functions.inc.php');
+	require_once(dirname(__FILE__) . '/include/config.inc.php');
+	require_once(dirname(__FILE__) . '/include/functions.inc.php');
 
     /**
      *
      * Build json header
+     * @param array $arr
+     * @return json
      */
-    function returnJson($arr){
+    function returnJson($arr) {
         header('Content-type: application/json');
 
         print json_encode($arr);
         exit;
     }
-
-
-	// Analyze file object
-	if (!empty($_FILES)){
-		debugLog("_FILES: --> " . var_dump($_FILES));
-		foreach ($_FILES as $file) {
-			debugLog('POST DATA: $_FILE ->' . print_r($file));
-			debugLog('POST DATA: $_POST ->' . print_r($_POST));
-			if ($file['error'] != 0) {
-				$errors[] = array( 'text'=>'File error', 'error'=>$file['error'], 'name'=>$file['name']);
-				debugLog(print_r("file['error'] : " . $file['error']));
-				continue;
-			}
-			if(!$file['tmp_name']){
-				$errors[] = array( 'text'=>'Tmp file not found', 'name'=>$file['name']);
-				debugLog(print_r("file['tmp_name'] : " . $file['error']));
-				continue;
-			}
-
-			$tmp_file_path = $file['tmp_name'];
-			$filename =  (isset($file['filename']) )? $file['filename'] : $file['name'];
-
-			// START UPLOAD PROCESS
-			if( isset($_POST['dzuuid'])){
-				$chunks_res = resumableUpload($tmp_file_path, $filename);
-				if(!$chunks_res['final']){
-					returnJson( $chunks_res );
-				}
-				$tmp_file_path = $chunks_res['path'];
-			} else {
-                debugLog("_POST['dzuuid'] is not set!");
-            }
-		}
-	} else {
-		debugLog('_FILES Object is empty! --> ' . var_dump($_FILES));
-	}
-
-	// Cleanup aborted file uploads
-	// Remove according temporary folders
-	// if (isset($_POST['method']) && $_POST['method'] == 'cleanup') {
-		// debugLog(var_dump($_POST));
-		// debugLog(var_dump($_FILE));
-		// $dir = $GLOBALS['upload_folder_path'].DS."tmp".DS;
-        // // $identifier = ( isset($_POST['file']) ) ? trim($_POST['dzuuid']) : '';
-
-        // $cleanup_folder = "$dir$identifier";
-	// }
 
     /**
      *
@@ -102,7 +62,9 @@
 	/**
      *
      * Create folders from dropzone upload
-     * @param string $file_chunks_folder - directory path
+     * @param string $tmp_file_path - directory path
+     * @param string $filename - file name
+     * @return array
      */
     function resumableUpload($tmp_file_path, $filename){
 
@@ -142,12 +104,7 @@
                 $errors[] = array( 'text'=>'Move error', 'name'=>$filename, 'index'=>$chunkInd );
             }
 
-            if( count($errors) == 0 and $new_path = checkAllParts(  $file_chunks_folder,
-                                                                    $filename,
-                                                                    $extension,
-                                                                    $totalSize,
-                                                                    $totalChunks,
-                                                                    $successes, $errors, $warnings) and count($errors) == 0){
+            if( count($errors) == 0 and $new_path = checkAllParts($file_chunks_folder, $filename, $extension, $totalSize, $totalChunks, $successes, $errors, $warnings) and count($errors) == 0) {
                 return array('final'=>true, 'path'=>$new_path, 'successes'=>$successes, 'errors'=>$errors, 'warnings' =>$warnings);
             }
 		return array('final'=>false, 'successes'=>$successes, 'errors'=>$errors, 'warnings' =>$warnings);
@@ -156,6 +113,15 @@
     /**
      *
      * Check if file chunks exist and create final file
+     * @param string $file_chunks_folder
+     * @param string $filename
+     * @param string $extension
+     * @param float $totalSize
+     * @param int $totalChunks
+     * @param array $successes
+     * @param array $errors
+     * @param array $warnings
+     * @return string
      */
     function checkAllParts( $file_chunks_folder,
                             $filename,
@@ -214,7 +180,14 @@
      * gather all the parts of the file together
      * @param string $file_chunks_folder - the temporary directory holding all the parts of the file
      * @param string $fileName - the original file name
-     * @param string $totalSize - original file size (in bytes)
+     * @param string $newFileName - new file name
+     * @param string $extension - file extension
+     * @param string $total_size - original file size (in bytes)
+     * @param int $total_chunks - chunk amount
+     * @param array & $successes
+     * @param array & $errors
+     * @param array & $warnings
+     * @return string
      */
     function createFileFromChunks($file_chunks_folder, $fileName, $newFileName , $extension, $total_size, $total_chunks,
                                             &$successes, &$errors, &$warnings) {
@@ -231,7 +204,7 @@
             return false;
         }
 
-		// create complted folder if it does not exist yet
+		// create completed folder if it does not exist yet
 		if (!is_dir($rel_path)) {
 			mkdir($rel_path, 0777, true);
 		}
@@ -241,7 +214,7 @@
             $errors[] = 'cannot create the destination file';
             return false;
         }
-        for ($i=0; $i<$total_chunks; $i++) {
+        for ($i=0; $i < $total_chunks; $i++) {
 			// debugLog('FUNC: createFileFromChunks -> fwrite' . $file_chunks_folder.DS.$fileName.'.part'.$i);
             fwrite($fp, file_get_contents($file_chunks_folder.DS.$fileName.'.part'.$i));
         }
@@ -253,6 +226,11 @@
     /**
      *
      * Check for further files using a numeric index counter as filename suffix
+     * @param string $rel_path
+     * @param string $orig_file_name
+     * @param string $extension
+     * @param array & $errors
+     * @return string
      */
     function getNextAvailableFilename( $rel_path, $orig_file_name, $extension, &$errors ){
         if( file_exists("$rel_path$orig_file_name$extension") ){
@@ -266,4 +244,52 @@
         }
     return $orig_file_name;
     }
+
+    /**
+    * Analyze form post data
+    */
+    if (!empty($_FILES)){
+        debugLog("_FILES: --> " . var_dump($_FILES));
+        foreach ($_FILES as $file) {
+            debugLog('POST DATA: $_FILE ->' . print_r($file));
+            debugLog('POST DATA: $_POST ->' . print_r($_POST));
+            if ($file['error'] != 0) {
+                $errors[] = array( 'text'=>'File error', 'error'=>$file['error'], 'name'=>$file['name']);
+                debugLog(print_r("file['error'] : " . $file['error']));
+                continue;
+            }
+            if(!$file['tmp_name']){
+                $errors[] = array( 'text'=>'Tmp file not found', 'name'=>$file['name']);
+                debugLog(print_r("file['tmp_name'] : " . $file['error']));
+                continue;
+            }
+
+            $tmp_file_path = $file['tmp_name'];
+            $filename =  (isset($file['filename']) )? $file['filename'] : $file['name'];
+
+            // START UPLOAD PROCESS
+            if( isset($_POST['dzuuid'])){
+                $chunks_res = resumableUpload($tmp_file_path, $filename);
+                if(!$chunks_res['final']){
+                    returnJson( $chunks_res );
+                }
+                $tmp_file_path = $chunks_res['path'];
+            } else {
+                debugLog("_POST['dzuuid'] is not set!");
+            }
+        }
+    } else {
+        debugLog('_FILES Object is empty! --> ' . var_dump($_FILES));
+    }
+
+    // Cleanup aborted file uploads
+    // Remove according temporary folders
+    // if (isset($_POST['method']) && $_POST['method'] == 'cleanup') {
+        // debugLog(var_dump($_POST));
+        // debugLog(var_dump($_FILE));
+        // $dir = $GLOBALS['upload_folder_path'].DS."tmp".DS;
+        // // $identifier = ( isset($_POST['file']) ) ? trim($_POST['dzuuid']) : '';
+
+        // $cleanup_folder = "$dir$identifier";
+    // }
 ?>

@@ -7,6 +7,11 @@
 	 *
      */
 
+    /*.
+        require_module 'core';
+        require_module 'file';
+    .*/
+
 	// Start session to make $_SESSION available
     if(!isset($_SESSION)) session_start();
 
@@ -14,6 +19,7 @@
 	define('__ROOT__', str_replace("\\","/",dirname(__FILE__)));
 
 	require_once(__ROOT__ . '/include/config.inc.php');
+	require_once(__ROOT__ . '/include/functions.inc.php');
 
 	// phpinfo();
 
@@ -114,9 +120,9 @@
 								<div class="input-group">
 									<span class="input-group-label"><label for="newDestination"><?php echo _LNG('SELECT_DESTINATION'); ?>:</label></span>
 									<select name="newDestination" id="newDestination" class="input-group-field" data-abide-ignore>
-										<option value="<?php echo trim(_LNG('SELECT_OPTION_1_VALUE')) ?>"><?php echo _LNG('SELECT_OPTION_1'); ?></option>
-										<option value="<?php echo trim(_LNG('SELECT_OPTION_2_VALUE')) ?>"><?php echo _LNG('SELECT_OPTION_2'); ?></option>
-										<option value="<?php echo trim(_LNG('SELECT_OPTION_3_VALUE')) ?>"><?php echo _LNG('SELECT_OPTION_3'); ?></option>
+										<?php
+											echo createSelectOptionsFromXml($GLOBALS['configXML']->destination);
+								        ?>
 									</select>
 								</div>
 
