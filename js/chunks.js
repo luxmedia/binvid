@@ -9,15 +9,15 @@ var msgFormInvalid =        'Es gibt Fehler in einigen Feldern. Bitte prüfen.',
 
 // App parameters and Options
     isValidForm =           false,
-    debugMode =             1,
+    debugMode =             0,
     preventDuplicates =     1,
-    initialProgress =       0, // used tro fix issue 690 - https://github.com/enyo/dropzone/issues/690
+    initialProgress =       0, // used to fix issue 690 - https://github.com/enyo/dropzone/issues/690
     minTitleLength =        4,
     maxTitleLength =        52,
-    videoFormats =          '.mpg, .m2t, .m2p, .mpeg, .mts, .m2v, .mov, .mp4, .wmv, .vob, .mxf',
-    audioFormats =          '.wav, .aif, .mp3, .mp2, .m4a',
     messageHideDelay =      5000, // in ms
-
+	loadingHideDelay =      700, // in ms
+	loadingTimer = 			[],
+	
 // Objects and DOM-elements
     submitButton =          document.querySelector("#dzSubmit"),
     resetButton =           document.querySelector("#dzReset"),
@@ -29,41 +29,26 @@ var msgFormInvalid =        'Es gibt Fehler in einigen Feldern. Bitte prüfen.',
     DwDropzone =            {}, // Dropzone object
     $formObject =           $(); // jQUery Dropzone object
 
-// Dropzone options
-var dzOptions = {
-        url:                    'chunks.php',
-        acceptedFiles:          '.mpg,.m2t,.m2p,.mpeg,.mts,.m2v,.mov,.mp4,.wmv,.vob,.mxf,.wav,.aif,.mp3,.mp2,.m4a',
-        addRemoveLinks:         true,
-        autoProcessQueue:       false,
-        chunking:               true, // split file upload in smaller parts
-        chunkSize:              24*1024*1024, // Chunk size in bytes = 28MB Chunks
-        clickable:              '#btnAddFile',
-        forceChunking:          true,
-        maxFiles:               null, // 1, //Only one File
-        maxFilesize:            25*1024, // max file size in MB, default 256
-        method:                 'POST',
-        parallelChunkUploads:   true,
-        parallelUploads:        20, // default: 2
-        paramName:              'file', // DOM-element containing the file
-        previewsContainer:      '.dropzone-previews',
-        // previewTemplate:         document.querySelector('#appPreview').innerHTML,
-        retryChunks:            true,
-        retryChunksLimit:       3,
-        uploadMultiple:         false, // must be false when chunking is true
-        // Dropzone messages:
-        dictDefaultMessage:     'Drag or click here to upload file ...',
-        dictRemoveFile:         'Datei entfernen',
-        dictCancelUpload:       'Upload abbrechen',
-        dictCancelUploadConfirmation: 'Bitte bestätigen: Upload wirklich abbrechen?',
-        dictInvalidFileType:    'FEHLER: Dieser Dateityp kann nicht verarbeitet werden.'
-};
-
 // ----------------------------
 // DROPZONE: Avoid automatic initialization of .dropzone
 // ----------------------------
 if (typeof "Dropzone" != "undefined") {
     Dropzone.options.myAwesomeDropzone = false;
     Dropzone.autoDiscover = false;
+}
+
+// ----------------------------
+// ASSIGN DOM objects
+// ----------------------------
+function assignGlobalDomObjects() {
+	submitButton =          document.querySelector("#dzSubmit");
+    resetButton =           document.querySelector("#dzReset");
+    inputs =                document.querySelectorAll('input:not([type="submit"])');
+    formElement =           document.getElementById('DwDropzone');
+    progressTotal =         document.querySelector('#progressTotal');
+
+    $formObject =       	$(dzId);
+    progressTotal.style.display = 'none';	
 }
 
 // ----------------------------
@@ -110,15 +95,21 @@ function loadConfigXML() {
     xml.send(null);
 
     xml.onreadystatechange = function() {
+		// check if xml is fully loaded without error
         if ((this.readyState == 4) && (this.status == 200)) {
             var xmlData = loadXMLString(xml.responseText);
-            debug(xmlData);
+            // debug(xmlData);
             if (xmlData) {
-                var dzConfig = xmlData.getElementsByTagName('dropzone')[0];
-                var debugMode = xmlData.getElementsByTagName('debugMode')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue;
-                console.log(debugMode);
-            }
-        }
+                debugMode = getNodeValue(xmlData, 'debugMode');
+				console.log(debugMode);
+				initApp(xmlData);
+            } else {
+				console.log("FUNC: loadCOnfigXML -> xmlData empty : " + xmlData);
+			}
+			
+        } else {
+			// do something here, if there is an error
+		}
     };
 }
 
@@ -229,6 +220,31 @@ function showMessage(msg, type) {
     }, messageHideDelay);
 }
 
+/**
+* SHOW/HIDE GLOBAL MESSAGES
+* ------------------------------------
+* @param string msg
+* @param string type
+*/
+function toggleLoadingOverlay(state) {
+    "use strict";
+    var container = document.getElementById('app-loading');
+
+	container.style.height =  window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+    if (state) {
+		// show loading overlay
+		clearTimeout(loadingTimer);
+		container.classList.add('is--active');
+	} else {
+		// delay hide loading overlay
+		loadingTimer = window.setTimeout(function(){
+			container.classList.remove('is--active');
+		}, loadingHideDelay);
+	}
+}
+
+
 // ----------------------------
 // CREATE VIDEO THUMBNAIL USING frame-grab.js Plugin
 // ----------------------------
@@ -236,6 +252,7 @@ function showMessage(msg, type) {
 // https://github.com/enyo/dropzone/issues/1460
 function createVideoThumb(file, dzobject) {
     "use strict";
+
     var comps = file.name.split(".");
     if (comps.length === 1 || (comps[0] === "" && comps.length === 2)) {
         return;
@@ -252,11 +269,11 @@ function createVideoThumb(file, dzobject) {
                 var frameGrab = new FrameGrab({video: videoEl});
                 var imgEl = file.previewElement.querySelector("img");
                 frameGrab.grab(imgEl, 1, 160).then(
-                    function frameGrabbed(itemEntry) {
+                    function success(itemEntry) {
                         debug("FUNC: createVideoThumb -> frameGrabbed");
                         // do something here ...
                     },
-                    function frameFailedToGrab(reason) {
+                    function failure(reason) {
                         debug("FUNC: createVideoThumb - ERROR: Can't grab the video frame from file: " +
                             file.name + ". Reason: " + reason);
                     }
@@ -328,11 +345,102 @@ function resetForm() {
     progressTotal.querySelector('.progress-meter-text').textContent = '';
 }
 
-// ----------------------------
-// CREATE DROPZONE
-// ----------------------------
-function createDropzone() {
-    "use strict";
+/**
+* Helper function to get boolean of a string
+* @param string str
+* @return boolean
+* @link https://stackoverflow.com/a/21285901
+*/
+function getBool(str) {
+    return !!JSON.parse(String(str).toLowerCase());
+}
+
+/**
+* Function to do stuff when file has been added to dropzone
+* uses async mode, to ensure invoked functions to be finished until proceeding
+* @param string str
+* @return boolean
+*/
+async function dzFileAdded(file, dzFiles, dzObj) {
+	
+	debug('EVENT: addedfile -> file: ' +  JSON.stringify(file));
+	toggleLoadingOverlay(true);
+	var duplicateFound = false;
+
+	// Duplicate filter
+	if (dzFiles.length) {
+		var _i,
+			_len = dzFiles.length;
+		for (_i = 0; _i < _len - 1; _i++) // -1 to exclude current file
+		{
+			if (preventDuplicates && dzFiles[_i].name === file.name && dzFiles[_i].size === file.size && dzFiles[_i].lastModifiedDate.toString() === file.lastModifiedDate.toString()) {
+				showMessage(file.name + " : " + msgDuplicatesNotAllowed, 'alert');
+				this.removeFile(file);
+				duplicateFound = true;
+			}
+		}
+	}
+
+	if (!duplicateFound) {
+		enableFormButtons(true);
+		
+		// Create an input DOM element for each file
+		createFileTitleInput(file);
+		
+		// CREATE VIDEO THUMBNAIL
+		await createVideoThumb(file, this);
+
+	}
+	toggleLoadingOverlay(false);
+}
+
+/**
+* ----------------------------
+* CREATE DROPZONE
+* ----------------------------
+* @param dom-obj dzOptions
+*/
+function createDropzone(dzOptionsDom) {
+	// assign dropzone options from config.xml values
+	var _accpetedFiles = getNodeValue(dzOptionsDom, 'acceptedFilesVideo') + ", " + getNodeValue(dzOptionsDom, 'acceptedFilesAudio') + ", " + getNodeValue(dzOptionsDom, 'acceptedFilesImage');
+    var dzOptions = {
+        url:                    'chunks.php',
+        acceptedFiles:          _accpetedFiles, // getNodeValue(dzOptionsDom, 'acceptedFiles'),
+        addRemoveLinks:         getBool(getNodeValue(dzOptionsDom, 'addRemoveLinks')), // true,
+        autoProcessQueue:       getBool(getNodeValue(dzOptionsDom, 'autoProcessQueue')), // false,
+        chunking:               getNodeValue(dzOptionsDom, 'chunking'), // split file upload in smaller parts
+        chunkSize:              parseInt(getNodeValue(dzOptionsDom, 'chunkSize')) * 1024 * 1024, // 24*1024*1024, // Chunk size in bytes = 28MB Chunks
+        clickable:              '#btnAddFile',
+        forceChunking:          getBool(getNodeValue(dzOptionsDom, 'forceChunking')), // true,
+        maxFiles:               null, // 1, //Only one File
+        maxFilesize:            parseInt(getNodeValue(dzOptionsDom, 'maxFilesize')) * 1024, // 25*1024, // max file size in MB, default 256
+        method:                 'POST',
+        parallelChunkUploads:   getBool(getNodeValue(dzOptionsDom, 'parallelChunkUploads')), // true,
+        parallelUploads:        parseInt(getNodeValue(dzOptionsDom, 'parallelUploads')), // 20, // default: 2
+        paramName:              'file', // DOM-element containing the file
+        previewsContainer:      '.dropzone-previews',
+        // previewTemplate:         document.querySelector('#appPreview').innerHTML,
+        retryChunks:            getBool(getNodeValue(dzOptionsDom, 'retryChunks')), // true,
+        retryChunksLimit:       parseInt(getNodeValue(dzOptionsDom, 'retryChunksLimit')), // 3,
+        uploadMultiple:         getBool(getNodeValue(dzOptionsDom, 'uploadMultiple')), // false, // must be false when chunking is true
+        // Dropzone messages:
+        dictDefaultMessage:     'Drag or click here to upload file ...',
+        dictRemoveFile:         'Datei entfernen',
+        dictCancelUpload:       'Upload abbrechen',
+        dictCancelUploadConfirmation: 'Bitte bestätigen: Upload wirklich abbrechen?',
+        dictInvalidFileType:    'FEHLER: Dieser Dateityp kann nicht verarbeitet werden.'
+	};
+
+	// Show some Dropzone option values in form footer
+    document.getElementById('allowedMimeVideo').textContent = getNodeValue(dzOptionsDom, 'acceptedFilesVideo');
+    document.getElementById('allowedMimeAudio').textContent = getNodeValue(dzOptionsDom, 'acceptedFilesAudio');
+	document.getElementById('allowedMimeImage').textContent = getNodeValue(dzOptionsDom, 'acceptedFilesImage');
+    document.getElementById('allowedMaxSize').textContent = formatBytes(parseInt(getNodeValue(dzOptionsDom, 'maxFilesize')) * 1024 * 1024 * 1024);
+	document.getElementById('allowedMaxFiles').textContent = getNodeValue(dzOptionsDom, 'maxFiles');
+	
+	preventDuplicates = getBool(getNodeValue(dzOptionsDom, 'preventDuplicates'));
+
+	// Create Dropzone
     DwDropzone = new Dropzone(dzId, dzOptions);
 }
 
@@ -389,35 +497,10 @@ Dropzone.options.DwDropzone = {
         });
 
         // Event: addedfile
-        // You might want to show the submit button only when
-        // files are dropped here:
         this.on("addedfile", function(file) {
-            debug('EVENT: addedfile -> file: ' +  JSON.stringify(file));
-            var duplicateFound = false;
-
-            // Duplicate filter
-            if (this.files.length) {
-                var _i,
-                    _len = this.files.length;
-                for (_i = 0; _i < _len - 1; _i++) // -1 to exclude current file
-                {
-                    if (preventDuplicates && this.files[_i].name === file.name && this.files[_i].size === file.size && this.files[_i].lastModifiedDate.toString() === file.lastModifiedDate.toString()) {
-                        showMessage(file.name + " : " + msgDuplicatesNotAllowed, 'alert');
-                        this.removeFile(file);
-                        duplicateFound = true;
-                    }
-                }
-            }
-
-            if (!duplicateFound) {
-                enableFormButtons(true);
-
-                // CREATE VIDEO THUMBNAIL
-                createVideoThumb(file, this);
-
-                // Create an input DOM element for each file
-                createFileTitleInput(file);
-            }
+			
+			var dzFiles = this.files;
+			dzFileAdded(file, dzFiles, this);
 
         });
 
@@ -433,6 +516,7 @@ Dropzone.options.DwDropzone = {
             //debug("EVENT: uploadprogress -> file.name: " + file.name + ", progress: ", progress);
 
             if (file.previewElement) {
+				// Show and animate progress-bar
                 var _el = file.previewElement.querySelector("[data-dz-uploadprogress]"),
                     _content = Math.round(progress) + " %" + " (" + formatBytes(bytesSent) + ")";
 
@@ -577,28 +661,16 @@ Dropzone.options.DwDropzone = {
 
 };
 
-
-// ----------------------------
-// DOMREADY
-// ----------------------------
-
-// document.addEventListener("DOMContentLoaded", function(event) {
-$(document).ready(function() {
-    "use strict";
-
-    // LOAD CONFIG XML
-    loadConfigXML();
-
-    // ----------------------------
-    // ASSIGN DOM objects
-    // ----------------------------
-    $formObject =       $(dzId);
-    progressTotal.style.display = 'none';
-
-    // ----------------------------
+/**
+* Initialize application
+* @param dom-object xmlData
+*/
+function initApp(xmlData) {
+	
+	// ----------------------------
     // CREATE DROPZONE
     // ----------------------------
-    createDropzone();
+    createDropzone(xmlData.getElementsByTagName('dropzone')[0]);
 
     // ----------------------------
     // FORM VALIDATION
@@ -635,22 +707,35 @@ $(document).ready(function() {
         isValidForm = true;
         //enableFormButtons(true);
     });
+	
+}
 
-    // Printout compatible Formates and file-size restrictions
-    // var _arr = dzOptions.acceptedFiles.split(',');
+/**
+* Shorthand function to return value of given DOM-node
+* @param dom-object obj - dom object
+* @param string nName - node name
+* @return string
+* TODO: Fallback to "default" if "value" is empty
+*/
+function getNodeValue(obj, nName) {
+	var val = (obj.getElementsByTagName(nName)[0]) ? obj.getElementsByTagName(nName)[0].getElementsByTagName('value')[0].childNodes[0].nodeValue : '';
+	debug("getNodeValue -> " + nName + ": " + val);
+	return val;
+}
 
-    // for (i = 0, len =_arr.length; i < len; ++i) {
-        // var tmp = _arr[i].split('/');
-        // console.log(tmp);
-        // (tmp[0] == 'video') ? (videoFormats = videoFormats + ', .' + tmp[1]) : audioFormats = audioFormats + ', .' + tmp[1];
-    // }
 
-    var allowedMimeVideo = document.getElementById('allowedMimeVideo'),
-        allowedMimeAudio = document.getElementById('allowedMimeAudio'),
-        allowedMaxSize = document.getElementById('allowedMaxSize');
+// ----------------------------
+// DOMREADY
+// ----------------------------
 
-    allowedMimeVideo.textContent = videoFormats;
-    allowedMimeAudio.textContent = audioFormats;
-    allowedMaxSize.textContent = formatBytes(dzOptions.maxFilesize * 1024 * 1024);
+// document.addEventListener("DOMContentLoaded", function(event) {
+$(document).ready(function() {
+    "use strict";
+
+    // LOAD CONFIG XML
+    loadConfigXML();
+	
+    // ASSIGN GLOBAL DOM OBJECTS
+    assignGlobalDomObjects();
 
 });
