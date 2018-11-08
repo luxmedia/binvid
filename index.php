@@ -1,9 +1,9 @@
 <?php
 
     /**
-     * @author Volker Lux
+     * Dropzone.js based webinterface for video/audio file transfer to webserver
+	 * @author Volker Lux
      * @email volker.lux@dw.com
-     * Dropzone.js based webinterface for video file transfer to FTP
 	 *
      */
 
@@ -89,58 +89,40 @@
 						<!-- END: DROPZONE ADD FILES -->
 
 						<div>
-						<!--
-							<div class="column small-12 medium-12 large-6">
-								<div class="floated-label-wrapper">
-									<label for="firstName">Vorname:
-										<input type="text" name="firstName" id="firstName" placeholder="Vorname" />
-									</label>
-								</div>
+							<!-- DROPZONE DESTINATION -->
+							<div class="input-group">
+								<span class="input-group-label"><label for="newDestination"><?php echo _LNG('SELECT_DESTINATION'); ?>:</label></span>
+								<select name="newDestination" id="newDestination" class="input-group-field" data-abide-ignore>
+									<?php
+										echo createSelectOptionsFromXml($GLOBALS['configXML']->destinationFolder);
+									?>
+								</select>
 							</div>
 
-							<div class="column small-12 medium-12 large-6">
-								<div class="floated-label-wrapper">
-									<label for="lastName">Nachname:
-										<input type="text" name="lastName" id="lastName" placeholder="Nachname" />
-									</label>
-								</div>
-							</div>
+							<!-- FORM ACTIONS -->
+							<button type="submit" class="button primary expanded" name="dzSubmit" id="dzSubmit" disabled="disabled" ><?php echo _LNG('BUTTON_SUBMIT'); ?></button>
 
-							<div class="column small-12">
-								<div class="floated-label-wrapper">
-									<label for="userEmail">Email:<em>*</em>
-										<input type="email" name="userEmail" id="userEmail" placeholder="Email" pattern="email" required data-abide-ignore />
-										<span class="form-error" id="">Fehler! Dies ist ein Pflichtfeld, bitte g&uuml;ltige Email-Adresse angeben.</span>
-									</label>
-								</div>
-							</div>
+							<button type="reset" class="button secondary expanded" name="reset" id="dzReset" disabled="disabled" ><?php echo _LNG('BUTTON_RESET'); ?></button>
 
-							-->
-
-								<div class="input-group">
-									<span class="input-group-label"><label for="newDestination"><?php echo _LNG('SELECT_DESTINATION'); ?>:</label></span>
-									<select name="newDestination" id="newDestination" class="input-group-field" data-abide-ignore>
-										<?php
-											echo createSelectOptionsFromXml($GLOBALS['configXML']->destination);
-								        ?>
-									</select>
-								</div>
-
-								<button type="submit" class="button primary expanded" name="dzSubmit" id="dzSubmit" disabled="disabled" ><?php echo _LNG('BUTTON_SUBMIT'); ?></button>
-
-								<button type="reset" class="button secondary expanded" name="reset" id="dzReset" disabled="disabled" ><?php echo _LNG('BUTTON_RESET'); ?></button>
-
-
-							<div class="callout">
+							<!-- FORM LEGEND -->
+							<div class="callout secondary">
 								<ul id="formSubnotes" class="no-bullet">
 									<!-- <p class="requiredNote" id="passwordHelpText"><?php echo _LNG('MANDATORY'); ?></p> -->
-									<li><span class="label secondary"><?php echo _LNG('ALLOWED_MAX_SIZE'); ?>:</span> <span class="allowedMimeTypes" id="allowedMaxSize"></span></li>
-									<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_VIDEO'); ?>:</span> <span class="allowedMimeTypes" id="allowedMimeVideo"></span></li>
-									<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_AUDIO'); ?>:</span> <span class="allowedMimeTypes" id="allowedMimeAudio"></span></li>
+									<li><span class="label secondary"><?php echo _LNG('ALLOWED_MAX_SIZE'); ?>:</span> <span class="value" id="allowedMaxSize"></span></li>
+									<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_TYPES'); ?>:</span>
+										<ul>
+											<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_VIDEO'); ?>:</span> <span class="value" id="allowedMimeVideo"></span></li>
+											<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_AUDIO'); ?>:</span> <span class="value" id="allowedMimeAudio"></span></li>
+											<li><span class="label secondary"><?php echo _LNG('ALLOWED_MIME_IMAGE'); ?>:</span> <span class="value" id="allowedMimeImage"></span></li>
+										</ul>
+									</li>
+									<li><hr></li>
+									<li><span class="label"><?php echo _LNG('ALLOWED_MAX_FILES'); ?>:</span> <span class="value" id="allowedMaxFiles"></span><span class="help-text"><?php echo _LNG('ALLOWED_MAX_FILES_NOTE'); ?></span></li>									
 								</ul>
 							</div>
 
-							<div class="text-center"><a href="https://confluence.dw.com/x/qBXiBw" class="helpLink" target="_blank"><i class="icon icon--help icon--small icon--left"></i>Hilfe / Dokumentation</a></div>
+							<!-- FORM HELP -->
+							<div class="text-center"><a href="<?php echo $GLOBALS['configXML']->helpLink ?>" class="helpLink" target="_blank"><i class="icon icon--help icon--small icon--left"></i>Hilfe / Dokumentation</a></div>
 
 						</div>
 
@@ -198,22 +180,28 @@
 </div>
 <!-- END: TEMPLATES -->
 
+<!-- LOADING OVERLAY -->
+<div id="app-loading">
+	<div class="sp sp-circle"></div>
+</div>
+<!-- END: LOADING OVERLAY -->
+
+
 <!-- JAVASCRIPT: VENDOR -->
 
-<!-- foundation and dependencies -->
+<!-- vendor: foundation and dependencies -->
 <script src="js/vendor/jquery-3.3.1.min.js"></script>
 <script src="js/vendor/what-input.js"></script>
 <script src="js/vendor/foundation.min.js"></script>
 
-<!-- video dropzone -->
+<!-- vendor: dropzone -->
 <script src="js/vendor/dropzone.fork.js"></script>
 
-<!-- video frame grab -->
+<!-- vendor: frame grab -->
 <script src="js/vendor/rsvp.js"></script>
 <script src="js/vendor/frame-grab.js"></script>
 
 <!-- JAVASCRIPT: CUSTOM -->
-<!-- <script src="js/config.js"></script>-->
 <script src="js/app.js"></script>
 <script src="js/chunks.js"></script>
 <!-- END: JAVASCRIPTS -->

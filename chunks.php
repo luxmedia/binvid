@@ -12,7 +12,7 @@
      * Name of the final file returned upon finished process
 	 *
 	 * @modified by David Wagner
-	 * @modified 2018-10-29 - by Volker Lux
+	 * @modified by Volker Lux
      */
 
     /*.
