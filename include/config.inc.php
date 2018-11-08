@@ -1,5 +1,15 @@
 <?php
 
+    /**
+     * Global configuration file
+	 * Loads config.xml
+	 * Loads language files
+	 * Provides some global variables
+	 * @author Volker Lux
+     * @email volker.lux@dw.com
+	 *
+     */
+
     /*.
         require_module 'core';
         require_module 'file';
@@ -36,8 +46,8 @@
 
 	// Paths
 	//$upload_folder_path = 'f:'.DS.'temp'.DS.'functions'.DS.'uploads';
-	$upload_folder_path = 		isset($configXML->folder->uploadFolder) ? (string) $configXML->folder->uploadFolder : 'functions/uploads';
+	$upload_folder_path = 		isset($configXML->uploadFolder) ? (string) $configXML->uploadFolder : 'functions/uploads';
 
 	// Logging and debug
-	$log_path = 				isset($configXML->folder->debugLogFolder) ? (string) $configXML->folder->debugLogFolder : 'logs';
+	$log_path = 				isset($configXML->debugLogFolder) ? (string) $configXML->debugLogFolder : 'logs';
 	$enableDebugLog = 			1;
