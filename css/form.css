@@ -105,8 +105,8 @@ label em {
 	margin: 5px 0 10px 0;
 }
 
-#formSubnotes .allowedMimeTypes {
-	display: block;
+#formSubnotes .value {
+	/* display: block; */
 	color: rgba(0,0,0,0.7);
 }
 

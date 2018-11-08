@@ -13,6 +13,7 @@
   opacity: 1;
 }
 
+/* Callout */
 #app-messages .callout {
 	display: block;
 	overflow: hidden;
@@ -35,4 +36,57 @@
 .callout.success {
 	border-color: #4caf50;
 	color: #004D40;
+}
+.callout.secondary {
+	border-color: rgba(0,0,0,0.05);
+}
+
+/* Loading */
+#app-loading {
+	position: fixed;
+	width: 100%;
+	max-height: 100vh;
+	height: 100vh;
+	left: 0;
+	top:0;
+	z-index: 9999;
+	background: rgba(255,255,255,0.9);
+	display: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	text-align: center;
+}
+
+#app-loading.is--active {
+	display: block;
+	opacity: 1;
+}
+
+.sp {
+	width: 48px;
+	height: 48px;
+	clear: both;
+	margin: -24px auto 0 -24px;
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	background: #fff;
+}
+
+/* Spinner Circle Rotation */
+.sp-circle {
+	border: 4px rgba(0, 152, 255,0.25) solid;
+	border-top: 4px rgba(0, 152, 255,1) solid;
+	border-radius: 50%;
+	-webkit-animation: spCircRot .6s infinite linear;
+	animation: spCircRot .6s infinite linear;
+}
+
+@-webkit-keyframes spCircRot {
+	from { -webkit-transform: rotate(0deg); }
+	to { -webkit-transform: rotate(359deg); }
+}
+@keyframes spCircRot {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(359deg); }
 }
